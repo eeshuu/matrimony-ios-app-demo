@@ -1,0 +1,134 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Matrimony – SwiftUI App Live Demo</title>
+<meta name="description" content="Clickable live demo of the Matrimony SwiftUI matrimonial iOS app template.">
+<style>
+:root{--red:#d7141f;--bg:#f4f1f2;--ink:#1b1b1f;--muted:#6b6b73;--card:#fff;--line:#e6e1e3}
+@media (prefers-color-scheme:dark){:root{--bg:#141216;--ink:#f2eff1;--muted:#a19ca4;--card:#1e1b20;--line:#2e2a30}}
+*{box-sizing:border-box}
+body{margin:0;font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,sans-serif;background:var(--bg);color:var(--ink)}
+header{background:linear-gradient(135deg,#d7141f,#7a0810);color:#fff;padding:22px 16px 26px;text-align:center}
+header h1{margin:0;font-size:28px}
+header p{margin:6px 0 0;opacity:.9;font-size:15px}
+.wrap{max-width:1100px;margin:0 auto;padding:24px 16px;display:flex;gap:32px;align-items:flex-start;justify-content:center;flex-wrap:wrap}
+.phone{position:relative;width:min(340px,92vw);aspect-ratio:1206/2622;border-radius:48px;padding:12px;background:#111;box-shadow:0 20px 50px rgba(0,0,0,.35)}
+.screen{position:relative;width:100%;height:100%;border-radius:38px;overflow:hidden;background:#fff}
+.screen img{width:100%;height:100%;display:block;user-select:none;-webkit-user-drag:none}
+.hot{position:absolute;cursor:pointer;border-radius:12px}
+.hint .hot{background:rgba(215,20,31,.18);outline:2px solid rgba(215,20,31,.55)}
+.controls{display:flex;gap:8px;justify-content:center;margin-top:14px;flex-wrap:wrap}
+button{font:inherit;border:1px solid var(--line);background:var(--card);color:var(--ink);padding:8px 14px;border-radius:999px;cursor:pointer}
+button.primary{background:var(--red);border-color:var(--red);color:#fff}
+.side{flex:1;min-width:260px;max-width:420px}
+.side h2{font-size:16px;margin:0 0 8px}
+.group{margin-bottom:14px}
+.group h3{font-size:12px;letter-spacing:.06em;text-transform:uppercase;color:var(--muted);margin:0 0 6px}
+.list{display:flex;flex-wrap:wrap;gap:6px}
+.list button{font-size:13px;padding:6px 11px}
+.list button.on{background:var(--red);color:#fff;border-color:var(--red)}
+.note{font-size:13px;color:var(--muted);background:var(--card);border:1px solid var(--line);border-radius:14px;padding:12px 14px;line-height:1.5}
+.cap{text-align:center;font-weight:600;margin-top:10px}
+footer{text-align:center;font-size:12px;color:var(--muted);padding:16px}
+</style>
+</head>
+<body>
+<header>
+  <h1>Matrimony</h1>
+  <p>SwiftUI Matrimonial iOS App Template · Clickable live demo</p>
+</header>
+<div class="wrap">
+  <div>
+    <div class="phone"><div class="screen" id="screen"><img id="img" alt=""></div></div>
+    <div class="cap" id="cap"></div>
+    <div class="controls">
+      <button id="back">‹ Back</button>
+      <button id="hint" class="primary">Show tap areas</button>
+      <button id="next">Next ›</button>
+    </div>
+  </div>
+  <div class="side">
+    <div class="note">Tap the phone screen to move through the app as you would on an iPhone, using the tab bar, profile cards and buttons. You can also jump to any screen below. This demo uses the template's sample data. Data on the real screens can be replaced with your own backend.</div>
+    <div id="groups" style="margin-top:16px"></div>
+  </div>
+</div>
+<footer>Screens shown with built-in sample data. All names and profiles are fictional.</footer>
+<script>
+const S={
+ create_profile:{t:"Create Profile (step 1 of 5)",g:"Getting started"},
+ matches:{t:"Matches – Home",g:"Main tabs"},
+ discover:{t:"Discover – Swipe",g:"Main tabs"},
+ interests:{t:"Interests",g:"Main tabs"},
+ messages:{t:"Messages",g:"Main tabs"},
+ my_profile:{t:"My Profile",g:"Main tabs"},
+ profile_detail:{t:"Profile Detail",g:"Profiles & communication"},
+ chat:{t:"Chat",g:"Profiles & communication"},
+ voice_call:{t:"Voice Call",g:"Profiles & communication"},
+ video_call:{t:"Video Call",g:"Profiles & communication"},
+ contact_details:{t:"Contact Details",g:"Profiles & communication"},
+ kundli_match:{t:"Kundli Match",g:"Profiles & communication"},
+ search:{t:"Search",g:"Search & filters"},
+ advanced_filters:{t:"Advanced Filters",g:"Search & filters"},
+ partner_preferences:{t:"Partner Preferences",g:"Search & filters"},
+ shortlist:{t:"Shortlist",g:"Search & filters"},
+ notifications:{t:"Notifications",g:"Engagement & account"},
+ who_viewed_me:{t:"Who Viewed Me",g:"Engagement & account"},
+ edit_profile:{t:"Edit Profile",g:"Engagement & account"},
+ premium_plans:{t:"Premium Plans",g:"Engagement & account"},
+ help_support:{t:"Help & Support",g:"Engagement & account"}
+};
+const order=Object.keys(S);
+// hotspots in 920x2000 coordinate space: [x1,y1,x2,y2,target]
+const TAB=[[0,1810,184,1960,"matches"],[184,1810,368,1960,"discover"],[368,1810,552,1960,"interests"],[552,1810,736,1960,"messages"],[736,1810,920,1960,"my_profile"]];
+const H={
+ create_profile:[[37,1757,883,1885,"matches"]],
+ matches:[...TAB,[700,140,790,220,"advanced_filters"],[810,130,900,220,"notifications"],[37,680,155,860,"discover"],[183,680,300,860,"interests"],[330,680,447,860,"help_support"],[485,680,605,860,"kundli_match"],[640,680,760,860,"premium_plans"],[37,580,400,640,"premium_plans"],[37,985,780,1355,"profile_detail"],[37,1395,780,1770,"profile_detail"],[790,900,890,960,"search"]],
+ discover:[...TAB,[37,540,883,1635,"profile_detail"],[575,1685,700,1810,"interests"],[800,140,900,220,"advanced_filters"]],
+ interests:[...TAB,[37,575,883,855,"profile_detail"],[460,855,883,958,"messages"]],
+ messages:[...TAB,[0,500,920,665,"chat"],[0,665,920,830,"chat"],[0,830,920,995,"chat"]],
+ my_profile:[...TAB,[810,130,900,220,"notifications"],[355,365,565,575,"edit_profile"],[37,1080,883,1252,"premium_plans"],[37,1300,318,1458,"who_viewed_me"],[318,1300,600,1458,"interests"],[600,1300,883,1458,"shortlist"],[37,1505,883,1625,"partner_preferences"],[37,1625,883,1745,"help_support"],[37,1745,883,1810,"premium_plans"]],
+ profile_detail:[[35,140,110,220,"matches"],[795,135,885,225,"shortlist"],[270,565,650,630,"kundli_match"],[37,1830,445,1960,"interests"],[477,1830,882,1960,"contact_details"]],
+ chat:[[20,140,90,220,"messages"],[690,140,770,220,"voice_call"],[800,140,890,220,"video_call"],[280,140,640,220,"profile_detail"]],
+ voice_call:[[378,1610,542,1775,"chat"]],
+ video_call:[[382,1660,538,1815,"chat"]],
+ contact_details:[[30,140,150,220,"profile_detail"],[73,1413,847,1542,"premium_plans"],[73,1600,847,1710,"interests"]],
+ kundli_match:[[770,140,900,220,"profile_detail"]],
+ search:[[37,910,883,1285,"profile_detail"],[37,1320,883,1690,"profile_detail"],[37,1725,883,2000,"profile_detail"],[37,738,240,815,"advanced_filters"],[258,738,425,815,"advanced_filters"]],
+ advanced_filters:[[30,150,150,215,"search"],[760,150,900,215,"matches"]],
+ partner_preferences:[[30,150,170,215,"my_profile"],[780,150,900,215,"my_profile"]],
+ edit_profile:[[30,150,170,215,"my_profile"],[780,150,900,215,"my_profile"]],
+ notifications:[[46,450,874,660,"interests"],[46,660,874,878,"who_viewed_me"],[46,1015,874,1230,"chat"],[46,1230,874,1448,"shortlist"],[46,1665,874,1920,"premium_plans"]],
+ who_viewed_me:[[40,150,105,215,"my_profile"],[37,845,883,1060,"profile_detail"],[37,1095,883,1312,"profile_detail"],[37,1347,883,1563,"profile_detail"],[37,1598,883,1815,"profile_detail"]],
+ shortlist:[[0,0,920,2000,"matches"]],
+ premium_plans:[[37,860,450,1695,"my_profile"],[475,860,900,1910,"my_profile"]],
+ help_support:[[30,150,150,215,"my_profile"]]
+};
+let cur="create_profile",hist=[];
+const img=document.getElementById('img'),scr=document.getElementById('screen'),cap=document.getElementById('cap');
+order.forEach(k=>{const i=new Image();i.src=k+'.jpg'});
+function show(k,push=true){
+  if(push&&k!==cur)hist.push(cur);
+  cur=k;img.src=k+'.jpg';img.alt=S[k].t;cap.textContent=S[k].t;
+  scr.querySelectorAll('.hot').forEach(e=>e.remove());
+  (H[k]||[]).forEach(([x1,y1,x2,y2,t])=>{const d=document.createElement('div');d.className='hot';d.title=S[t].t;
+    Object.assign(d.style,{left:x1/9.2+'%',top:y1/20+'%',width:(x2-x1)/9.2+'%',height:(y2-y1)/20+'%'});
+    d.onclick=()=>show(t);scr.appendChild(d)});
+  document.querySelectorAll('.list button').forEach(b=>b.classList.toggle('on',b.dataset.k===k));
+  try{history.replaceState(null,'','#'+k)}catch(e){}
+}
+const groups={};order.forEach(k=>(groups[S[k].g]=groups[S[k].g]||[]).push(k));
+const G=document.getElementById('groups');
+for(const [g,ks] of Object.entries(groups)){const d=document.createElement('div');d.className='group';
+  d.innerHTML='<h3>'+g+'</h3><div class="list"></div>';
+  ks.forEach(k=>{const b=document.createElement('button');b.textContent=S[k].t;b.dataset.k=k;b.onclick=()=>show(k);d.lastChild.appendChild(b)});
+  G.appendChild(d)}
+document.getElementById('back').onclick=()=>{if(hist.length)show(hist.pop(),false)};
+document.getElementById('next').onclick=()=>show(order[(order.indexOf(cur)+1)%order.length]);
+const hb=document.getElementById('hint');
+hb.onclick=()=>{scr.classList.toggle('hint');hb.textContent=scr.classList.contains('hint')?'Hide tap areas':'Show tap areas'};
+const start=location.hash.slice(1);show(S[start]?start:"create_profile",false);
+</script>
+</body>
+</html>
